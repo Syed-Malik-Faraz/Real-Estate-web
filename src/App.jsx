@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard'
 import Finances from "./pages/Finances";
 import Properties from "./pages/Properties";
 import Tenants from "./pages/Tenatns";
+// import Settings from "./pages/Settings";
 
 function App() {
 
@@ -14,8 +15,8 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/finances" element={<Finances />} />
         <Route path="/properties" element={<Properties />} />
-        
         <Route path="/tenants" element={<Tenants />} />
+        {/* <Route path="/settings" element={<Settings />} /> */}
       </Routes>
     </BrowserRouter>
 
