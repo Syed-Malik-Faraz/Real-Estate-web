@@ -9,10 +9,7 @@ import Navbar from "../components/Navbar.jsx";
 const calculateStats = (units = []) => {
   const totalUnits = units.length;
 
-  const occupiedUnits = units.filter(
-    (u) => u.status === "Occupied"
-  );
-
+  const occupiedUnits = units.filter((u) => u.status === "Occupied");
   const occupied = occupiedUnits.length;
 
   const monthlyRevenue = occupiedUnits.reduce(
@@ -37,7 +34,6 @@ const calculateStats = (units = []) => {
 export default function Properties() {
   const [allProperties, setAllProperties] = useState(propertiesData);
   const [properties, setProperties] = useState(propertiesData);
-
   const [searchTerm, setSearchTerm] = useState("");
 
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -57,7 +53,7 @@ export default function Properties() {
     imagePreview: "",
   });
 
-  /* ================= SEARCH (HTML STYLE) ================= */
+  /* ================= SEARCH ================= */
   const handleSearch = (value) => {
     setSearchTerm(value);
 
@@ -96,7 +92,6 @@ export default function Properties() {
       yearBuilt: newProperty.yearBuilt,
       description: newProperty.description,
       image: newProperty.imagePreview,
-
       units_detail: [],
       amenities: [],
     };
@@ -134,28 +129,30 @@ export default function Properties() {
 
   /* ================= UI ================= */
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 px-6">
+    <div className="min-h-screen bg-gray-50 pt-24 px-4 sm:px-6">
       <Navbar />
 
       {/* HEADER + SEARCH */}
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-4xl font-bold">Property Portfolio</h1>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+            Property Portfolio
+          </h1>
           <p className="text-gray-600">Manage your properties</p>
         </div>
 
-        <div className="flex gap-3 w-full md:w-auto">
+        <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
           <input
             type="text"
             placeholder="Search properties..."
-            className="border p-2 rounded w-full md:w-64"
+            className="border p-2 rounded w-full sm:w-64"
             value={searchTerm}
             onChange={(e) => handleSearch(e.target.value)}
           />
 
           <button
             onClick={() => setShowAddModal(true)}
-            className="bg-orange-700 text-white px-6 py-2 rounded-lg whitespace-nowrap"
+            className="bg-orange-700 text-white px-6 py-2 rounded-lg whitespace-nowrap w-full sm:w-auto"
           >
             Add Property
           </button>
@@ -163,7 +160,7 @@ export default function Properties() {
       </div>
 
       {/* PROPERTY GRID */}
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {properties.map((p) => {
           const stats = calculateStats(p.units_detail);
 
@@ -262,7 +259,10 @@ export default function Properties() {
               className="w-full border p-2 rounded"
               value={newProperty.description}
               onChange={(e) =>
-                setNewProperty({ ...newProperty, description: e.target.value })
+                setNewProperty({
+                  ...newProperty,
+                  description: e.target.value,
+                })
               }
             />
 

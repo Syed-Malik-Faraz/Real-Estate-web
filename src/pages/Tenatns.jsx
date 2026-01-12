@@ -57,8 +57,7 @@ const Tenants = () => {
     const late = tenants.filter((t) => t.paymentStatus === "late").length;
 
     const renewals = tenants.filter((t) => {
-      const days =
-        (new Date(t.leaseEnd) - today) / (1000 * 60 * 60 * 24);
+      const days = (new Date(t.leaseEnd) - today) / (1000 * 60 * 60 * 24);
       return days <= 30 && days > 0;
     }).length;
 
@@ -99,20 +98,20 @@ const Tenants = () => {
     <div className="bg-gray-50 min-h-screen">
       <Navbar />
 
-      <div className="pt-28 px-6 max-w-7xl mx-auto">
+      <div className="pt-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         {/* HEADER */}
-        <div className="flex justify-between items-center mb-12">
-          <h2 className="text-4xl font-bold">Tenants</h2>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 gap-4">
+          <h2 className="text-3xl sm:text-4xl font-bold">Tenants</h2>
           <button
             onClick={() => setShowAddModal(true)}
-            className="bg-amber-700 text-white px-6 py-2 rounded-lg"
+            className="bg-amber-700 text-white px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap"
           >
             + Add Tenant
           </button>
         </div>
 
         {/* METRICS */}
-        <div className="grid md:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           <MetricCard
             title="Total Tenants"
             value={metrics.total}
@@ -121,7 +120,6 @@ const Tenants = () => {
             color="text-blue-600"
             icon={<path strokeWidth="2" d="M17 20h5v-2a4 4 0 00-4-4h-1" />}
           />
-
           <MetricCard
             title="Active Tenants"
             value={metrics.active}
@@ -130,7 +128,6 @@ const Tenants = () => {
             color="text-green-600"
             icon={<path strokeWidth="2" d="M5 13l4 4L19 7" />}
           />
-
           <MetricCard
             title="Late Payments"
             value={metrics.late}
@@ -139,7 +136,6 @@ const Tenants = () => {
             color="text-red-600"
             icon={<path strokeWidth="2" d="M12 8v4l3 3" />}
           />
-
           <MetricCard
             title="Lease Renewals"
             value={metrics.renewals}
@@ -151,11 +147,11 @@ const Tenants = () => {
         </div>
 
         {/* TENANT CARDS */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {tenants.map((t) => (
             <div
               key={t.id}
-              className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
+              className="bg-white p-4 sm:p-6 rounded-xl shadow hover:shadow-lg transition"
             >
               <div className="flex items-center gap-4 mb-4">
                 <img
@@ -163,7 +159,6 @@ const Tenants = () => {
                   alt={t.firstName}
                   className="w-14 h-14 rounded-full object-cover border"
                 />
-
                 <div>
                   <h3 className="text-lg font-semibold">
                     {t.firstName} {t.lastName}
@@ -177,15 +172,11 @@ const Tenants = () => {
               <div className="text-sm space-y-2">
                 <p>
                   <b>📞 Contact:</b>{" "}
-                  <span className="text-gray-700">
-                    {t.phone || "N/A"}
-                  </span>
+                  <span className="text-gray-700">{t.phone || "N/A"}</span>
                 </p>
-
                 <p>
                   <b>💰 Rent:</b> ${t.monthlyRent}
                 </p>
-
                 <p>
                   <b>Status:</b>{" "}
                   <span
@@ -198,7 +189,6 @@ const Tenants = () => {
                     {t.paymentStatus}
                   </span>
                 </p>
-
                 <p>
                   <b>📅 Lease Ends:</b>{" "}
                   {new Date(t.leaseEnd).toLocaleDateString()}
@@ -211,11 +201,13 @@ const Tenants = () => {
 
       {/* ADD TENANT MODAL */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-xl w-full max-w-lg">
-            <h3 className="text-xl font-bold mb-4">Add Tenant</h3>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white p-4 sm:p-6 rounded-xl w-full max-w-lg">
+            <h3 className="text-xl font-bold mb-4 text-center sm:text-left">
+              Add Tenant
+            </h3>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
                 ["firstName", "First Name"],
                 ["lastName", "Last Name"],
@@ -232,7 +224,7 @@ const Tenants = () => {
                   onChange={(e) =>
                     setForm({ ...form, [key]: e.target.value })
                   }
-                  className="border p-2 rounded"
+                  className="border p-2 rounded w-full"
                 />
               ))}
 
@@ -242,12 +234,15 @@ const Tenants = () => {
                 onChange={(e) =>
                   setForm({ ...form, leaseEnd: e.target.value })
                 }
-                className="border p-2 rounded col-span-2"
+                className="border p-2 rounded col-span-1 sm:col-span-2 w-full"
               />
             </div>
 
-            <div className="flex justify-end gap-4 mt-6">
-              <button onClick={() => setShowAddModal(false)}>
+            <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
+              <button
+                onClick={() => setShowAddModal(false)}
+                className="px-4 py-2 rounded border"
+              >
                 Cancel
               </button>
               <button

@@ -1,167 +1,3 @@
-// import React, { useState, useEffect } from "react";
-
-// const PropertyModal = ({ property, activeTab, setActiveTab, onClose }) => {
-//   const [units, setUnits] = useState([]);
-//   const [newUnit, setNewUnit] = useState({
-//     number: "",
-//     type: "",
-//     rent: "",
-//     status: "available",
-//   });
-
-//   /* ---------- Sync units when modal opens ---------- */
-//   useEffect(() => {
-//     setUnits(property.units_detail || []);
-//   }, [property]);
-
-//   /* ---------- Add Unit ---------- */
-//   const handleAddUnit = () => {
-//     if (!newUnit.number || !newUnit.rent) return;
-
-//     setUnits([
-//       ...units,
-//       {
-//         ...newUnit,
-//         rent: Number(newUnit.rent),
-//       },
-//     ]);
-
-//     setNewUnit({
-//       number: "",
-//       type: "",
-//       rent: "",
-//       status: "available",
-//     });
-//   };
-
-//   /* ---------- Revenue Calculation ---------- */
-//   const monthlyRevenue = units.reduce(
-//     (sum, u) => (u.status === "occupied" ? sum + u.rent : sum),
-//     0
-//   );
-
-//   return (
-//     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-//       <div className="bg-white max-w-5xl w-full rounded-xl p-6 overflow-y-auto">
-//         <div className="flex justify-between mb-6">
-//           <h2 className="text-2xl font-bold">{property.name}</h2>
-//           <button onClick={onClose}>✕</button>
-//         </div>
-
-//         {/* TABS */}
-//         <div className="flex gap-6 border-b mb-6">
-//           {["overview", "units", "financials"].map((tab) => (
-//             <button
-//               key={tab}
-//               onClick={() => setActiveTab(tab)}
-//               className={`pb-2 ${
-//                 activeTab === tab
-//                   ? "border-b-2 border-orange-600 font-semibold"
-//                   : "text-gray-500"
-//               }`}
-//             >
-//               {tab.toUpperCase()}
-//             </button>
-//           ))}
-//         </div>
-
-//         {/* OVERVIEW */}
-//         {activeTab === "overview" && (
-//           <div className="space-y-2">
-//             <p className="text-gray-600">{property.description || "No description"}</p>
-//             <p><b>Year Built:</b> {property.yearBuilt || "-"}</p>
-//             <p><b>Total Units:</b> {units.length}</p>
-//           </div>
-//         )}
-
-//         {/* UNITS */}
-//         {activeTab === "units" && (
-//           <div className="space-y-6">
-//             {/* ADD UNIT FORM */}
-//             <div className="grid grid-cols-4 gap-4">
-//               <input
-//                 placeholder="Unit No"
-//                 className="border p-2 rounded"
-//                 value={newUnit.number}
-//                 onChange={(e) =>
-//                   setNewUnit({ ...newUnit, number: e.target.value })
-//                 }
-//               />
-
-//               <input
-//                 placeholder="Type"
-//                 className="border p-2 rounded"
-//                 value={newUnit.type}
-//                 onChange={(e) =>
-//                   setNewUnit({ ...newUnit, type: e.target.value })
-//                 }
-//               />
-
-//               <input
-//                 placeholder="Rent"
-//                 type="number"
-//                 className="border p-2 rounded"
-//                 value={newUnit.rent}
-//                 onChange={(e) =>
-//                   setNewUnit({ ...newUnit, rent: e.target.value })
-//                 }
-//               />
-
-//               <button
-//                 onClick={handleAddUnit}
-//                 className="bg-orange-700 text-white rounded"
-//               >
-//                 Add Unit
-//               </button>
-//             </div>
-
-//             {/* UNITS TABLE */}
-//             <table className="w-full">
-//               <thead>
-//                 <tr className="border-b">
-//                   <th>Unit</th>
-//                   <th>Type</th>
-//                   <th>Status</th>
-//                   <th>Rent</th>
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 {units.length > 0 ? (
-//                   units.map((u) => (
-//                     <tr key={u.number} className="border-b">
-//                       <td>{u.number}</td>
-//                       <td>{u.type}</td>
-//                       <td>{u.status}</td>
-//                       <td>₹{u.rent}</td>
-//                     </tr>
-//                   ))
-//                 ) : (
-//                   <tr>
-//                     <td colSpan="4" className="text-center py-4 text-gray-500">
-//                       No units added
-//                     </td>
-//                   </tr>
-//                 )}
-//               </tbody>
-//             </table>
-//           </div>
-//         )}
-
-//         {/* FINANCIALS */}
-//         {activeTab === "financials" && (
-//           <div className="space-y-2">
-//             <p><b>Monthly Revenue:</b> ₹{monthlyRevenue}</p>
-//             <p><b>Annual Revenue:</b> ₹{monthlyRevenue * 12}</p>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default PropertyModal;
-
-
 import { useState } from "react";
 
 const PropertyModal = ({ property, activeTab, setActiveTab, onClose, onUpdate }) => {
@@ -201,20 +37,22 @@ const PropertyModal = ({ property, activeTab, setActiveTab, onClose, onUpdate })
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white max-w-5xl w-full rounded-xl p-6 overflow-y-auto">
-        <div className="flex justify-between mb-6">
-          <h2 className="text-2xl font-bold">{property.name}</h2>
-          <button onClick={onClose}>✕</button>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white max-w-5xl w-full rounded-xl p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
+        
+        {/* HEADER */}
+        <div className="flex justify-between items-center mb-4 sm:mb-6">
+          <h2 className="text-lg sm:text-2xl font-bold">{property.name}</h2>
+          <button onClick={onClose} className="text-lg">✕</button>
         </div>
 
         {/* TABS */}
-        <div className="flex gap-6 border-b mb-6">
+        <div className="flex gap-4 sm:gap-6 border-b mb-4 sm:mb-6 overflow-x-auto">
           {["overview", "units", "financials"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`pb-2 ${
+              className={`pb-2 whitespace-nowrap text-sm sm:text-base ${
                 activeTab === tab
                   ? "border-b-2 border-orange-600 font-semibold"
                   : "text-gray-500"
@@ -227,8 +65,8 @@ const PropertyModal = ({ property, activeTab, setActiveTab, onClose, onUpdate })
 
         {/* OVERVIEW */}
         {activeTab === "overview" && (
-          <div>
-            <p className="text-gray-600 mb-4">{property.description || "—"}</p>
+          <div className="space-y-2 text-sm sm:text-base">
+            <p className="text-gray-600">{property.description || "—"}</p>
             <p><b>Year Built:</b> {property.yearBuilt || "—"}</p>
             <p><b>Total Units:</b> {property.units_detail?.length || 0}</p>
           </div>
@@ -237,30 +75,34 @@ const PropertyModal = ({ property, activeTab, setActiveTab, onClose, onUpdate })
         {/* UNITS */}
         {activeTab === "units" && (
           <div className="space-y-4">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b">
-                  <th>Unit</th>
-                  <th>Status</th>
-                  <th>Rent</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(property.units_detail || []).map((u) => (
-                  <tr key={u.number} className="border-b">
-                    <td>{u.number}</td>
-                    <td>{u.status}</td>
-                    <td>${u.rent}</td>
+            
+            {/* TABLE */}
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm sm:text-base">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-2">Unit</th>
+                    <th className="text-left py-2">Status</th>
+                    <th className="text-left py-2">Rent</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {(property.units_detail || []).map((u) => (
+                    <tr key={u.number} className="border-b">
+                      <td className="py-2">{u.number}</td>
+                      <td className="py-2">{u.status}</td>
+                      <td className="py-2">${u.rent}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
             {/* ADD UNIT */}
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
               <input
                 placeholder="Unit No"
-                className="border p-2 rounded"
+                className="border p-2 rounded text-sm"
                 value={newUnit.number}
                 onChange={(e) =>
                   setNewUnit({ ...newUnit, number: e.target.value })
@@ -269,7 +111,7 @@ const PropertyModal = ({ property, activeTab, setActiveTab, onClose, onUpdate })
 
               <input
                 placeholder="Type"
-                className="border p-2 rounded"
+                className="border p-2 rounded text-sm"
                 value={newUnit.type}
                 onChange={(e) =>
                   setNewUnit({ ...newUnit, type: e.target.value })
@@ -279,7 +121,7 @@ const PropertyModal = ({ property, activeTab, setActiveTab, onClose, onUpdate })
               <input
                 placeholder="Rent"
                 type="number"
-                className="border p-2 rounded"
+                className="border p-2 rounded text-sm"
                 value={newUnit.rent}
                 onChange={(e) =>
                   setNewUnit({ ...newUnit, rent: e.target.value })
@@ -288,7 +130,7 @@ const PropertyModal = ({ property, activeTab, setActiveTab, onClose, onUpdate })
 
               <button
                 onClick={handleAddUnit}
-                className="bg-orange-700 text-white rounded"
+                className="bg-orange-700 text-white rounded p-2 text-sm"
               >
                 Add Unit
               </button>
@@ -298,7 +140,7 @@ const PropertyModal = ({ property, activeTab, setActiveTab, onClose, onUpdate })
 
         {/* FINANCIALS */}
         {activeTab === "financials" && (
-          <div>
+          <div className="space-y-2 text-sm sm:text-base">
             <p><b>Monthly Revenue:</b> ${property.monthlyRevenue}</p>
             <p><b>Annual Revenue:</b> ${property.monthlyRevenue * 12}</p>
           </div>

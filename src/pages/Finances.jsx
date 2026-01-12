@@ -1,12 +1,10 @@
-
 import { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
 import { Link } from "react-router-dom";
 import initialExpenses from "../data/Expenses";
-import Metric from "../components/Metric.jsx"
+import Metric from "../components/Metric.jsx";
 import ChartCard from "../components/ChartCard.jsx";
 import Navbar from "../components/Navbar.jsx";
-
 
 /* ================== MAIN COMPONENT ================== */
 export default function Finances() {
@@ -24,8 +22,6 @@ export default function Finances() {
     vendor: "",
     category: "",
   });
-
-
 
   useEffect(() => setAnimate(true), []);
 
@@ -46,24 +42,33 @@ export default function Finances() {
           {
             name: "Expenses",
             type: "bar",
-            data: [expenses.reduce((a, e) => a + e.amount, 0) / 4, 400, 420, 430],
+            data: [
+              expenses.reduce((a, e) => a + e.amount, 0) / 4,
+              400,
+              420,
+              430,
+            ],
           },
         ],
       });
 
-      // Pie chart dynamic by category
       const categoryTotals = expenses.reduce((acc, e) => {
         acc[e.category] = (acc[e.category] || 0) + Number(e.amount);
         return acc;
       }, {});
-      const pieData = Object.entries(categoryTotals).map(([name, value]) => ({
-        name,
-        value,
-      }));
 
       expenseChart.setOption({
         tooltip: { trigger: "item" },
-        series: [{ type: "pie", radius: "55%", data: pieData }],
+        series: [
+          {
+            type: "pie",
+            radius: "55%",
+            data: Object.entries(categoryTotals).map(([name, value]) => ({
+              name,
+              value,
+            })),
+          },
+        ],
       });
 
       cashFlowChart.setOption({
@@ -79,11 +84,13 @@ export default function Finances() {
     };
 
     renderCharts();
+
     const resize = () => {
       revenueChart.resize();
       expenseChart.resize();
       cashFlowChart.resize();
     };
+
     window.addEventListener("resize", resize);
     return () => {
       window.removeEventListener("resize", resize);
@@ -91,7 +98,7 @@ export default function Finances() {
       expenseChart.dispose();
       cashFlowChart.dispose();
     };
-  }, [expenses]); // <-- re-render charts whenever expenses change
+  }, [expenses]);
 
   /* ------------------ EXPENSE ACTIONS ------------------ */
   const approveExpense = (id) => {
@@ -118,6 +125,7 @@ export default function Finances() {
       alert("All fields are required!");
       return;
     }
+
     const newExpense = {
       id: Date.now(),
       date: new Date().toISOString().split("T")[0],
@@ -128,6 +136,7 @@ export default function Finances() {
       status: "pending",
       property: "Default Property",
     };
+
     setExpenses((prev) => [...prev, newExpense]);
     setFormData({ description: "", amount: "", vendor: "", category: "" });
     setShowModal(false);
@@ -136,54 +145,49 @@ export default function Finances() {
   /* ================== UI ================== */
   return (
     <div className="bg-gray-50 min-h-screen">
-      {/* NAVBAR */}
-      {/* <nav className="fixed top-0 left-0 right-0 bg-white border-b z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between">
-          <h1 className="text-2xl font-bold">PropertyVision</h1>
-          <div className="flex gap-6">
-            <Link to="/" className="text-gray-600">Dashboard</Link>
-            <Link to="/finances" className="font-semibold">Finances</Link>
-          </div>
-        </div>
-      </nav> */}
-
-<Navbar />
+      <Navbar />
 
       {/* HEADER */}
-      <section className="pt-24 max-w-7xl mx-auto px-6">
-        <div className="flex justify-between mb-8">
-          <h2 className="text-3xl font-bold">Financial Management</h2>
+      <section className="pt-24 max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold">
+            Financial Management
+          </h2>
           <button
             onClick={() => setShowModal(true)}
-            className="bg-orange-600 text-white px-5 py-2 rounded hover:opacity-90"
+            className="bg-orange-600 text-white px-5 py-2 rounded hover:opacity-90 w-full sm:w-auto"
           >
             Add Expense
           </button>
         </div>
 
         {/* METRICS */}
-        <div className="grid md:grid-cols-4 gap-6 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           <Metric title="Revenue" value="$10.2M" animate={animate} />
-          <Metric title="Expenses" value={`$${expenses.reduce((a, e) => a + e.amount, 0)}`} animate={animate} />
+          <Metric
+            title="Expenses"
+            value={`$${expenses.reduce((a, e) => a + e.amount, 0)}`}
+            animate={animate}
+          />
           <Metric title="NOI" value="$5.4M" animate={animate} />
           <Metric title="Profit Margin" value="52.9%" animate={animate} />
         </div>
       </section>
 
       {/* CHARTS */}
-      <section className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
         <ChartCard title="Revenue vs Expenses" chartRef={revenueChartRef} />
         <ChartCard title="Expense Breakdown" chartRef={expenseChartRef} />
       </section>
 
       {/* CASH FLOW */}
-      <section className="max-w-7xl mx-auto px-6 mt-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 mt-8">
         <ChartCard title="Cash Flow" chartRef={cashFlowChartRef} />
       </section>
 
       {/* EXPENSE TABLE */}
-      <section className="max-w-7xl mx-auto px-6 mt-10">
-        <table className="w-full bg-white rounded-xl overflow-hidden">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 mt-10 overflow-x-auto">
+        <table className="min-w-[700px] w-full bg-white rounded-xl overflow-hidden">
           <thead className="bg-gray-100">
             <tr>
               <th className="p-4 text-left">Description</th>
@@ -206,10 +210,16 @@ export default function Finances() {
                 <td className="p-4 flex gap-4">
                   {e.status === "pending" && (
                     <>
-                      <button onClick={() => approveExpense(e.id)} className="text-green-600">
+                      <button
+                        onClick={() => approveExpense(e.id)}
+                        className="text-green-600"
+                      >
                         Approve
                       </button>
-                      <button onClick={() => rejectExpense(e.id)} className="text-red-600">
+                      <button
+                        onClick={() => rejectExpense(e.id)}
+                        className="text-red-600"
+                      >
                         Reject
                       </button>
                     </>
@@ -221,14 +231,15 @@ export default function Finances() {
         </table>
       </section>
 
-      {/* MODAL FORM */}
+      {/* MODAL */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
           <form
             onSubmit={handleSubmit}
-            className="bg-white p-6 rounded-xl w-full max-w-lg scale-100 transition"
+            className="bg-white p-6 rounded-xl w-full max-w-lg"
           >
             <h3 className="text-xl font-bold mb-4">Add Expense</h3>
+
             <div className="flex flex-col gap-3">
               <input
                 type="text"
@@ -263,11 +274,19 @@ export default function Finances() {
                 className="border p-2 rounded"
               />
             </div>
-            <div className="mt-4 flex justify-end gap-3">
-              <button type="button" onClick={() => setShowModal(false)} className="bg-gray-200 px-4 py-2 rounded">
+
+            <div className="mt-4 flex flex-col sm:flex-row justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="bg-gray-200 px-4 py-2 rounded w-full sm:w-auto"
+              >
                 Cancel
               </button>
-              <button type="submit" className="bg-orange-600 text-white px-4 py-2 rounded">
+              <button
+                type="submit"
+                className="bg-orange-600 text-white px-4 py-2 rounded w-full sm:w-auto"
+              >
                 Add Expense
               </button>
             </div>
@@ -277,4 +296,3 @@ export default function Finances() {
     </div>
   );
 }
-
